@@ -46,13 +46,32 @@ class StockTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.stock.update(datetime(2015, 12, 5), -1)
 
+    def test_after_multiple_updates_should_return_ordered(self):
+        """Requirement: * After multiple updates, elements in stock.price_history
+    should be ordered from the latest to the oldest"""
+        self.stock.update(datetime(2015, 12, 5), price=80)
+        self.stock.update(datetime(2015, 12, 6), price=82.6)
+        self.stock.update(datetime(2015, 12, 4), price=81)
+        self.stock.update(datetime(2015, 12, 9), price=87.6)
+        self.stock.update(datetime(2015, 12, 7), price=81.9)
+        self.stock.update(datetime(2015, 12, 8), price=84.9)
+
+        self.assertEqual(
+            [s[1] for s in self.stock.price_history],
+            [87.6, 84.9, 81.9, 82.6, 80, 81]
+        )
+
     def test_after_multiple_updates_should_return_last(self):
-        """Requirement: * After multiple updates, the object gives us the latest
+        """Requirement: * After multiple updates, stock.price gives us the latest
     price"""
         self.stock.update(datetime(2015, 12, 5), price=80)
         self.stock.update(datetime(2015, 12, 6), price=82.6)
+        self.stock.update(datetime(2015, 12, 4), price=81)
+        self.stock.update(datetime(2015, 12, 9), price=87.6)
+        self.stock.update(datetime(2015, 12, 7), price=81.9)
         self.stock.update(datetime(2015, 12, 8), price=84.9)
-        self.assertAlmostEqual(self.stock.price, 84.9, delta=0.1)
+
+        self.assertAlmostEqual(self.stock.price, 87.6, delta=0.1)
 
     def tearDown(self):
         pass
@@ -72,20 +91,24 @@ trend (if the last three quotes are increasing)"""
     # inherit setUp() from super()
 
     def test_trend_should_return_last_three_prices(self):
-        self.trend_fixture([80, 78.3, 81.1])
+        """Test the stock.trend method"""
+        self.trend_fixture([82, 79, 80, 78.3, 81.1])
         self.assertTrue(self.stock.trend, [80, 78.3, 81.1])
         print('Stock.trend returns the last three prices')
 
     def test_trend_should_be_incremental(self):
-        self.trend_fixture([81.1, 82.6, 84.9])
+        """Pass three recent growing prices in the method"""
+        self.trend_fixture([82, 79, 81.1, 82.6, 84.9])
         self.assertTrue(self.stock.trend_is_incremental())
 
     def test_trend_should_be_decremental(self):
-        self.trend_fixture([84.1, 82.6, 80.9])
+        """Pass three recent decrementing prices in the method"""
+        self.trend_fixture([82, 79, 84.1, 82.6, 80.9])
         self.assertFalse(self.stock.trend_is_incremental())
 
     def test_trend_should_be_none(self):
-        self.trend_fixture([84.1, 85.6, 80.9])
+        """Pass three recent not trended prices in the method"""
+        self.trend_fixture([82, 79, 84.1, 85.6, 80.9])
         self.assertIsNone(self.stock.trend_is_incremental())
 
     def tearDown(self):
