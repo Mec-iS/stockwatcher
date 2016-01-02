@@ -3,7 +3,7 @@ import unittest
 
 __author__ = 'Lorenzo'
 
-from stock import Stock
+from src.stock import Stock
 from datetime import datetime
 
 
@@ -58,11 +58,11 @@ class StockTest(unittest.TestCase):
 
         self.assertEqual(
             [s[1] for s in self.stock.price_history],
-            [87.6, 84.9, 81.9, 82.6, 80, 81]
+            [81, 80, 82.6, 81.9, 84.9, 87.6]
         )
 
     def test_after_multiple_updates_should_return_last(self):
-        """Requirement: * After multiple updates, stock.price gives us the latest
+        """Requirement: * After multiple updates, stock.price returns the latest
     price"""
         self.stock.update(datetime(2015, 12, 5), price=80)
         self.stock.update(datetime(2015, 12, 6), price=82.6)

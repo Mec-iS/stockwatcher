@@ -1,4 +1,6 @@
 # coding=utf-8
+import bisect
+
 __author__ = 'Lorenzo'
 
 # #todo: implement DMAC
@@ -17,21 +19,14 @@ class Stock:
         if not price > 0:
             raise ValueError('Price must be non-zero positive')
         # order updates from most recent, handles late updates
-        # #todo: implement bisect module
-        return setattr(
-            self,
-            'price_history',
-            sorted(
-                self.price_history + [(timestamp, price, )],
-                key=lambda x: x[0],
-                reverse=True)
-        )
+        # #todo: [DONE] implemented bisect module
+        return bisect.insort_left(self.price_history, (timestamp, price, ))
 
     @property
     def trend(self):
         """Return a trend (the last three prices)"""
         # take the last 3 elements and reverse them, return list of prices
-        return [p[1] for p in self.price_history[:2]]
+        return [p[1] for p in self.price_history[-3:]]
 
     def trend_is_incremental(self):
         """Return:
@@ -41,7 +36,7 @@ class Stock:
         t = self.trend
         gen = (
             True
-            if t[i] > t[i+1]
+            if t[i] < t[i+1]
             else False
             for i in range(len(t)-1)
         )
@@ -54,4 +49,4 @@ class Stock:
 
     @property
     def price(self):
-        return self.price_history[0][1] if self.price_history else None
+        return self.price_history[-1][1] if self.price_history else None
