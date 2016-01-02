@@ -15,9 +15,20 @@ python testing/tests_*someclass*.py
 ```
 Main Pattern:
 
-      -> Red          : inner patter: Arrange-Act-Assert
+      -> Red: Arrange-Act-Assert
       |  Green
       |  Refactor ->-
       |              |
        ------<-------             
+```
+
+```
+Refactoring:
+- Rename variables and methods
+- Make comments redundant by naming constants or using Enum
+- Extract method refactoring
+- Replace calculations with local variables
+- Extract conditionals to methods
+- Extract class
+- Move method to class
 ```

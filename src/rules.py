@@ -2,7 +2,7 @@
 
 __author__ = 'Lorenzo'
 
-from stock import Stock
+from src.stock import Stock
 
 
 class Rule:

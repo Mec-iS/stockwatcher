@@ -35,7 +35,7 @@ class RuleTest(unittest.TestCase):
         self.assertRaises(
             TypeError,
             Rule(
-                self.stock.symbol,
+                self.stock.symbol,  # should be a Stock object
                 lambda stock: self.stock.price > 79.8
             )
         )
@@ -43,7 +43,7 @@ class RuleTest(unittest.TestCase):
             TypeError,
             Rule(
                 self.stock,
-                'stock price > 79.8'
+                'stock price > 79.8'  # should be a callable
             )
         )
 

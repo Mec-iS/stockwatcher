@@ -1,6 +1,10 @@
 # coding=utf-8
 __author__ = 'Lorenzo'
 
+# #todo: implement DMAC
+# #todo: implement TimeSeries
+# #todo: implement moving average
+
 
 class Stock:
     def __init__(self, symbol):
@@ -12,12 +16,15 @@ class Stock:
         """Update price"""
         if not price > 0:
             raise ValueError('Price must be non-zero positive')
-        price_history = self.price_history + [(timestamp, price, )]
         # order updates from most recent, handles late updates
+        # #todo: implement bisect module
         return setattr(
             self,
             'price_history',
-            sorted(price_history, key=lambda x: x[0], reverse=True)
+            sorted(
+                self.price_history + [(timestamp, price, )],
+                key=lambda x: x[0],
+                reverse=True)
         )
 
     @property
