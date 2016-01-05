@@ -16,7 +16,7 @@ class StockTest(unittest.TestCase):
         self.stock = Stock("GOOG")
 
     def trend_fixture(self, prices):
-        """Create three new price in price history from a list of Float.
+        """Create new prices in price history from a list of Float.
     To be used in the tests below."""
         return [self.stock.update(datetime(2015, 12, i+1), price=p)
                 for i, p in enumerate(prices)]
@@ -94,7 +94,6 @@ trend (if the last three quotes are increasing)"""
         """Test the stock.trend method"""
         self.trend_fixture([82, 79, 80, 78.3, 81.1])
         self.assertTrue(self.stock.trend, [80, 78.3, 81.1])
-        print('Stock.trend returns the last three prices')
 
     def test_trend_should_be_incremental(self):
         """Pass three recent growing prices in the method"""
