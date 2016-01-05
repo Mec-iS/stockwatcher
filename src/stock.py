@@ -14,13 +14,22 @@ class Stock:
         # list of tuples list[0] is most recent
         self.price_history = []
 
+    @property
+    def price(self):
+        return self.price_history[-1][1] if self.price_history else None
+
     def update(self, timestamp, price):
         """Update price"""
         if not price > 0:
             raise ValueError('Price must be non-zero positive')
         # order updates from most recent, handles late updates
         # #todo: [DONE] implemented bisect module
-        return bisect.insort_left(self.price_history, (timestamp, price, ))
+        return bisect.insort_left(
+            self.price_history, (timestamp, price, )
+        ) if (timestamp, price, ) not in self.price_history else ValueError(
+            'Update already in price history'
+        )
+
 
     @property
     def trend(self):
@@ -47,6 +56,3 @@ class Stock:
         else:
             return None
 
-    @property
-    def price(self):
-        return self.price_history[-1][1] if self.price_history else None
