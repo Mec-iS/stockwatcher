@@ -29,7 +29,7 @@ class TimeSeries:
 
     def __str__(self):
         return ('Time series for {name!s}: {series!s}. \nAt {date!s} its STMA is {stma!s} and its '
-                'LTMA os {ltma!s}. I').format(
+                'LTMA is {ltma!s}').format(
             name=self.symbol,
             series= [('{:%Y-%m-%d %H:%M:%S}'.format(p.timestamp), p.price) for p in self.history],
             date=date.today(),
