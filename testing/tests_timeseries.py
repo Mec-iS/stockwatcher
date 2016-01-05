@@ -88,6 +88,14 @@ class StockDMACspot(StockDMACscenario):
         print('signal, (short series), (long series) >>> ', t)
         self.assertEqual(t[0], 0)
 
+    def tearDown(self):
+        del self.trend_fixture
+        del self.timeseries
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls.stock
+
 
 if __name__ == "__main__":
     unittest.main()

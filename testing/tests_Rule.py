@@ -3,8 +3,8 @@ import unittest
 
 __author__ = 'Lorenzo'
 
-from stock import Stock
-from rules import Rule
+from src.stock import Stock
+from src.rules import Rule
 from datetime import datetime
 
 
@@ -32,13 +32,6 @@ class RuleTest(unittest.TestCase):
         print(rule.condition(self.stock), ' stock.price is higher than 79.8')
 
     def test_should_fail_create_a_rule(self):
-        self.assertRaises(
-            TypeError,
-            Rule(
-                self.stock.symbol,  # should be a Stock object
-                lambda stock: self.stock.price > 79.8
-            )
-        )
         self.assertRaises(
             TypeError,
             Rule(

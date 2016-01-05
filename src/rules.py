@@ -15,12 +15,23 @@ class Rule:
     """
     def __init__(self, stock, condition):
         # a reference to a Stock
-        self.stock = stock if isinstance(stock, Stock) else TypeError(
-            'stock should be a Stock()'
-        )
+        self.stock = stock
         # a reference to a callable
         self.condition = condition if callable(condition) else TypeError(
             'condition should be a callable'
+        )
+
+    def __str__(self):
+        return 'Rule {id!s} for {stock!s}'.format(
+            id=id(self),
+            stock=self.stock.symbol
+        )
+
+    def __repr__(self):
+        return 'Rule {id!s} for {stock!s} with condition {condition!s}'.format(
+            id=id(self),
+            stock=self.stock.symbol,
+            condition=str(self.condition)
         )
 
     @property
