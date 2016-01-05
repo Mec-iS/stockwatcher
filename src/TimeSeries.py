@@ -8,7 +8,7 @@ __author__ = 'Lorenzo'
 Update = namedtuple('Update', ['timestamp', 'price'])
 
 
-class TimeSeries():
+class TimeSeries:
     """Provide time series and DMAC analysis"""
     def __init__(self, stock):
         # Turn tuples in to namedtuples for better handling
@@ -53,6 +53,8 @@ class TimeSeries():
         :param str period: 'short' for STMA, 'long' for LTMA. Default: 'short'
         :return: float
         """
+        # #todo: return short and long average in the same return statement (short, long)
+        # #todo: or (short, 0) or (0,0) if not enough prices in history
         period = {
             'short': 5,
             'long': 10
@@ -65,7 +67,73 @@ class TimeSeries():
             for h in self.history
             if on_date - timedelta(period) <= h.timestamp < on_date
         ]
-        return sum(series) / len(series)
+        return round((sum(series) / len(series)), 8)
+
+    def calculate_crossover(self, on_date):
+        """
+        Calculate if there is a crossover in a given date, if yes
+        a signal to buy (1), sell (-1) or neutral (0) is returned.
+
+        Check if in a given date there is a buy/sell signal using DMAC analysis.
+
+        Documentation:
+            Consider a stock, with closing prices as shown above. First, we
+            calculate two moving average trends. The short-term (5-day) moving
+            (STMA) average is calculated by taking the moving average for a
+            short number of days. The long-term moving (LTMA) average is
+            calculated by taking the moving average for a longer number of days,
+            for example the moving average of the last 10 days.
+            If the STMA crosses below-to-above the LTMA, that is a buy signal.
+            If the STMA crosses above-to-below the LTMA, that is a sell signal.
+
+        :param date on_date:
+        :return: tuple(int, tuple, tuple)
+        """
+        # #todo: refactor when self.calculate_stma_ltma() is rafactored
+        
+        # calculate short series for the given date and the date before
+        s_series = [
+            (
+                self.calculate_stma_ltma(
+                    self.history[self.history.index(d)-2].timestamp, 'short'
+                ),
+                self.calculate_stma_ltma(
+                    self.history[self.history.index(d)-1].timestamp, 'short'
+                ),
+                self.calculate_stma_ltma(
+                    d.timestamp, 'short'
+                ),
+             )
+            for d in self.history
+            if d.timestamp == on_date
+        ][0]
+        # calculate long series for the given date and the date before
+        l_series = [
+            (
+                self.calculate_stma_ltma(
+                    self.history[self.history.index(d)-2].timestamp, 'long'
+                ),
+                self.calculate_stma_ltma(
+                    self.history[self.history.index(d)-1].timestamp, 'long'
+                ),
+                self.calculate_stma_ltma(
+                    d.timestamp, 'long'
+                ),
+             )
+            for d in self.history
+            if d.timestamp == on_date
+        ][0]
+        # check if there is crossover in the given date
+        if abs(s_series[2] - l_series[2]) <= 0.02:
+            # check s_series for days before for signal
+            if s_series[0] >= l_series[0]:
+                # sell signal
+                return -1, s_series, l_series
+            elif s_series[0] < l_series[0]:
+                # buy signal
+                return 1, s_series, l_series
+        # no crossover or neutral signal
+        return 0, s_series, l_series
 
     def calculate_stma_ltma_time_series(self, on_date, delta):
         """
@@ -90,22 +158,3 @@ class TimeSeries():
         return tuple()"""
         raise NotImplemented()
 
-    def get_crossover_signal(self, on_date):
-        """
-        Check if in a given date there is a buy/sell signal using DMAC analysis.
-
-        Documentation:
-            Consider a stock, with closing prices as shown above. First, we
-            calculate two moving average trends. The short-term (5-day) moving
-            (STMA) average is calculated by taking the moving average for a
-            short number of days. The long-term moving (LTMA) average is
-            calculated by taking the moving average for a longer number of days,
-            for example the moving average of the last 10 days.
-            If the STMA crosses below-to-above the LTMA, that is a buy signal.
-            If the STMA crosses above-to-below the LTMA, that is a sell signal.
-
-        :param datetime date:
-        :return: 1, -1, 0
-        """
-        stm_lower = on_date - timedelta(6)
-        ltm_lower = on_date -timedelta(11)
