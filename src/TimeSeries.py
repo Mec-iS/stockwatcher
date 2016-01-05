@@ -89,8 +89,8 @@ class TimeSeries:
         :param date on_date:
         :return: tuple(int, tuple, tuple)
         """
-        # #todo: refactor when self.calculate_stma_ltma() is rafactored
-        
+        # #todo: refactor when self.calculate_stma_ltma() is refactored
+
         # calculate short series for the given date and the date before
         s_series = [
             (
