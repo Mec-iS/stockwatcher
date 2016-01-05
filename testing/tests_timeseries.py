@@ -89,7 +89,6 @@ class StockDMACspot(StockDMACscenario):
         self.assertEqual(t[0], 0)
 
     def tearDown(self):
-        del self.trend_fixture
         del self.timeseries
 
     @classmethod

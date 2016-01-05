@@ -8,6 +8,18 @@ __author__ = 'Lorenzo'
 Update = namedtuple('Update', ['timestamp', 'price'])
 
 
+class StockSignal:
+    """A minimal class to define a code for signals"""
+    __slots__ = ('buy', 'sell', 'neutral',)
+
+    def __init__(self):
+        self.buy = 1
+        self.sell = -1
+        self.neutral = 0
+
+StockSignal = StockSignal()
+
+
 class TimeSeries:
     """Provide time series and DMAC analysis"""
     def __init__(self, stock):
@@ -128,12 +140,12 @@ class TimeSeries:
             # check s_series for days before for signal
             if s_series[0] >= l_series[0]:
                 # sell signal
-                return -1, s_series, l_series
+                return StockSignal.sell, s_series, l_series
             elif s_series[0] < l_series[0]:
                 # buy signal
-                return 1, s_series, l_series
+                return StockSignal.buy, s_series, l_series
         # no crossover or neutral signal
-        return 0, s_series, l_series
+        return StockSignal.neutral, s_series, l_series
 
     def calculate_stma_ltma_time_series(self, on_date, delta):
         """
