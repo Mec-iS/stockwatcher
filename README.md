@@ -1,6 +1,7 @@
-A TDD exercise: a stock market reader/logger.
+# A TDD exercise: 
+## stock market reader/logger
 
-Inspired by PacktPub.com's Test Driven Python Development
+Inspired by [**PacktPub's Test Driven Python Development**](http://www.packtpub.com)
 
 To have an idea of what is going on, from the root directory:
 ```
@@ -32,3 +33,14 @@ Refactoring:
 - Extract class
 - Move method to class
 ```
+
+```
+Some vocabulary:
+1. 'Test doubles':
+- mocks
+- stubs
+- fakes
+- spies
+2. 'Patching'
+```
+
