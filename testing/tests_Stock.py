@@ -74,6 +74,8 @@ class StockTest(unittest.TestCase):
         self.assertAlmostEqual(self.stock.price, 87.6, delta=0.1)
 
     def tearDown(self):
+        print(self.stock) if self.stock.price is not None else None
+        del self.stock
         pass
 
     @classmethod

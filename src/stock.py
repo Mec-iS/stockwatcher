@@ -14,6 +14,18 @@ class Stock:
         # list of tuples list[0] is most recent
         self.price_history = []
 
+    def __repr__(self):
+        return 'Stock: {name!r} is {id!r}'.format(
+            name=self.symbol,
+            id=id(self)
+        )
+
+    def __str__(self):
+        return 'Stock {name!s}, its current price is {price!s}'.format(
+            name=self.symbol,
+            price=self.price
+        )
+
     @property
     def price(self):
         return self.price_history[-1][1] if self.price_history else None
@@ -29,7 +41,6 @@ class Stock:
         ) if (timestamp, price, ) not in self.price_history else ValueError(
             'Update already in price history'
         )
-
 
     @property
     def trend(self):

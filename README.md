@@ -5,7 +5,7 @@ Inspired by [**PacktPub's Test Driven Python Development**](http://www.packtpub.
 
 To have an idea of what is going on, from the root directory:
 ```
-python testing/tests_*someclass*.py
+python testing/tests_TimeSeries.py
 ```
 
 ## TO-DO:

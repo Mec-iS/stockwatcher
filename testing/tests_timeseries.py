@@ -36,7 +36,7 @@ class StockDMAC(unittest.TestCase):
 
     def test_should_calculate_stma(self):
         stma = self.timeseries.calculate_stma_ltma(date.today(), period='short')
-        print('STMA', stma)
+        #print('STMA', stma)
         self.assertAlmostEqual(stma, 82.16, delta=0.0001)
 
     def test_should_raise_error_in_calculate(self):
@@ -46,10 +46,13 @@ class StockDMAC(unittest.TestCase):
 
     def test_should_calculate_ltma(self):
         ltma = self.timeseries.calculate_stma_ltma(date.today(), period='long')
-        print('LTMA', ltma)
+        #print('LTMA', ltma)
         self.assertAlmostEqual(ltma, 82.07, delta=0.0001)
 
     def tearDown(self):
+        print(self.stock) if self.stock.price is not None else None
+        print(self.timeseries) if self.stock.price is not None else None
+        print('\n')
         del self.timeseries
 
     @classmethod

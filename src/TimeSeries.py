@@ -1,5 +1,5 @@
 # coding=utf-8
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from collections import namedtuple
 
 __author__ = 'Lorenzo'
@@ -12,6 +12,7 @@ class TimeSeries():
     """Provide time series and DMAC analysis"""
     def __init__(self, stock):
         # Turn tuples in to namedtuples for better handling
+        self.symbol = stock.symbol
         self.history = [
             Update(
                 timestamp=p[0],
@@ -19,6 +20,22 @@ class TimeSeries():
             )
             for p in stock.price_history
         ]
+
+    def __repr__(self):
+        return 'Time series for {name!r} is {id!r}'.format(
+            name=self.symbol,
+            id=id(self)
+        )
+
+    def __str__(self):
+        return ('Time series for {name!s}: {series!s}. \nAt {date!s} its STMA is {stma!s} and its '
+                'LTMA os {ltma!s}. I').format(
+            name=self.symbol,
+            series= [('{:%Y-%m-%d %H:%M:%S}'.format(p.timestamp), p.price) for p in self.history],
+            date=date.today(),
+            stma=self.calculate_stma_ltma(date.today(), 'short'),
+            ltma=self.calculate_stma_ltma(date.today(), 'long'),
+        )
 
     def calculate_stma_ltma(self, on_date, period='short'):
         """
@@ -50,7 +67,6 @@ class TimeSeries():
         ]
         return sum(series) / len(series)
 
-
     def calculate_stma_ltma_time_series(self, on_date, delta):
         """
         Calculate the time series of the Short Term Moving Average.
@@ -65,7 +81,6 @@ class TimeSeries():
         # slice price_history for the last five closing price
         # reverse
         #
-        raise NotImplemented()
         """def calculate(date, series=[]):
             if date == on_date:
                 return series
@@ -73,7 +88,7 @@ class TimeSeries():
             return calculate(date, series)
 
         return tuple()"""
-
+        raise NotImplemented()
 
     def get_crossover_signal(self, on_date):
         """
