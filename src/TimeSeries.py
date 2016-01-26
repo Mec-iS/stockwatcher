@@ -70,7 +70,7 @@ class TimeSeries:
         period = {
             'short': 5,
             'long': 10
-        }.get(period)
+        }.get(period, None)
         if period is None: raise ValueError('period can be only \'short\' or \'long\'')
 
         # #todo: consider only closing prices
